@@ -8,6 +8,7 @@ How to run:
                 2. Run the main.py file
                         $ python3 main.py
                 The error chart is generated in the Q1 directory by the name error.png
+                The images with the detected corners are present in the Q1/corners directory
                 The images with reprojected corners are present in the Q1/reproj directory
                 The images used for calibration are present in the Q1/images directory
         * Question 2: Camera-Lidar Calibration
@@ -20,3 +21,7 @@ How to run:
 Dependencies:
         * opencv-python
         * numpy
+
+References:
+        * https://learnopencv.com/camera-calibration-using-opencv/
+        * https://www.geeksforgeeks.org/python-opencv-cv2-imwrite-method/
