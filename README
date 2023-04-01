@@ -24,6 +24,7 @@ How to run:
 Dependencies:
         * opencv-python
         * numpy
+        * matplotlib
 
 References:
         * https://learnopencv.com/camera-calibration-using-opencv/
@@ -32,3 +33,8 @@ References:
         * https://docs.opencv.org/4.x/d9/d0c/group__calib3d.html#ga3207604e4b1a1758aa66acb6ed5aa65d
         * https://numpy.org/doc/stable/reference/generated/numpy.linalg.norm.html
         * https://docs.opencv.org/4.x/d9/d0c/group__calib3d.html#ga7a6c4e032c97f03ba747966e6ad862b1
+        * https://numpy.org/doc/stable/reference/generated/numpy.std.html
+        * https://numpy.org/doc/stable/reference/generated/numpy.mean.html
+        * https://www.geeksforgeeks.org/bar-plot-in-matplotlib/
+        * https://stackoverflow.com/questions/1221108/barchart-with-vertical-labels-in-python-matplotlib
+        * https://stackoverflow.com/questions/332289/how-do-i-change-the-size-of-figures-drawn-with-matplotlib
