@@ -94,16 +94,15 @@ print("============================================")
 
 print("Estimated Distortion coefficients:", dist.reshape(-1))
 
-for img, fname in zip(images, images_with_corners):
+for fname in images_with_corners:
+    # Read the image
+    img = cv2.imread(fname)
     h, w = img.shape[:2]
-    
     # Refine the camera matrix
-    newcameramtx, roi = cv2.getOptimalNewCameraMatrix(int_mtx, dist, (w,h), 1, (w,h))
+    newcameramtx, _ = cv2.getOptimalNewCameraMatrix(int_mtx, dist, (w,h), 0, (w,h))
     
     # Undistort and save the image
     dst = cv2.undistort(img, int_mtx, dist, None, newcameramtx)
-    x, y, w, h = roi
-    dst = dst[y:y+h, x:x+w]
     output_image_name = fname.replace("images", "undistorted")
     cv2.imwrite(output_image_name, dst)
 print("============================================")
@@ -135,3 +134,9 @@ plt.title("Re-projection error for various images")
 plt.gcf().set_figwidth(10)
 plt.savefig("error.png")
 print("============================================")
+
+for img, corners, reproj_corners, fname in zip(images, imgpoints, reproj_corners, images_with_corners):
+    reproj_name = fname.replace("images", "reproj")
+    img = cv2.drawChessboardCorners(img, CHECKERBOARD, corners, True)
+    img = cv2.drawChessboardCorners(img, CHECKERBOARD, reproj_corners, True)
+    cv2.imwrite(reproj_name, img)
