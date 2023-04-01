@@ -12,6 +12,8 @@ How to run:
                 The undistorted images are present in the Q1/undistorted directory
                 The error chart is generated in the Q1 directory by the name error.png
                 The images with reprojected corners are present in the Q1/reproj directory
+                The extrinsic parametres are also dumped to Q1/extrinsics.csv
+                The rotation vector in Q1/extrinsics.csv is the checkerboard plane normal in the camera coordinate frame
         * Question 2: Camera-Lidar Calibration
                 1. Go to the Q1 directory
                         $ cd Q1

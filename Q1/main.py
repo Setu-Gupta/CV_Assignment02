@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import os
 import glob
+import csv
 
 # Specify the pattern
 CHECKERBOARD = (9, 7) # The pattern has 9 corners per column and 7 corners per row
@@ -68,13 +69,26 @@ print("Estimated re-projection error:", reproj_error)
 print("============================================")
 
 print("The extrinsic parameters for all the images:")
-for i in range(len(rvecs)):
-    image_name = images_with_corners[i]
-    translation = tvecs[i]
-    rotation = rvecs[i]
-    rotation_angle = np.linalg.norm(rotation)
-    rotation_axis = rotation / rotation_angle
-    print(f"{image_name}: Rotation angle->{rotation_angle} Rotation axis->{rotation_axis} Translation->{translation}")
+
+# Dump the extrinsic parameters to a CSV file
+with open("extrinsics.csv", 'w', newline='') as csvfile:
+    fieldnames = ['Image name', 'Rotation angle', 'Rotation axis', 'Translation vector']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    writer.writeheader()
+    for i in range(len(rvecs)):
+        image_name = images_with_corners[i]
+        translation = tvecs[i]
+        rotation = rvecs[i]
+        rotation_angle = np.linalg.norm(rotation)
+        rotation_axis = rotation / rotation_angle
+        print(f"{image_name}: Rotation angle->{rotation_angle} Rotation axis->{rotation_axis.reshape(-1)} Translation->{translation.reshape(-1)}")
+
+        row = {'Image name': image_name,
+               'Rotation angle': rotation_angle,
+               'Rotation axis': rotation_axis.reshape(-1),
+               'Translation vector': translation.reshape(-1),
+              }
+        writer.writerow(row)
 print("============================================")
 
 print("Estimated Distortion coefficients:", dist)
