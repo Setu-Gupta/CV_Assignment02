@@ -1,0 +1,22 @@
+Name: Setu Gupta
+Roll Number: 2018190
+
+How to run:
+        * Question 1: Camera Calibration
+                1. Go to the Q1 directory
+                        $ cd Q1
+                2. Run the main.py file
+                        $ python3 main.py
+                The error chart is generated in the Q1 directory by the name error.png
+                The images with reprojected corners are present in the Q1/reproj directory
+                The images used for calibration are present in the Q1/images directory
+        * Question 2: Camera-Lidar Calibration
+                1. Go to the Q1 directory
+                        $ cd Q1
+                2. Run the main.py file
+                        $ python3 main.py
+                TODO
+
+Dependencies:
+        * opencv-python
+        * numpy
