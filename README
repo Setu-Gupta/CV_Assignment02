@@ -38,3 +38,8 @@ References:
         * https://www.geeksforgeeks.org/bar-plot-in-matplotlib/
         * https://stackoverflow.com/questions/1221108/barchart-with-vertical-labels-in-python-matplotlib
         * https://stackoverflow.com/questions/332289/how-do-i-change-the-size-of-figures-drawn-with-matplotlib
+        * https://stackoverflow.com/questions/56809980/how-to-import-all-the-points-from-a-pcd-file-into-a-2d-python-array
+        * https://stackoverflow.com/questions/35070178/fit-plane-to-a-set-of-points-in-3d-scipy-optimize-minimize-vs-scipy-linalg-lsts
+        * https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.lstsq.html
+        * https://scikit-spatial.readthedocs.io/en/stable/gallery/fitting/plot_plane.html
+        * https://scikit-spatial.readthedocs.io/en/stable/objects/toc.html
