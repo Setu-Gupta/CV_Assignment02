@@ -129,4 +129,4 @@ dmypy.json
 .pyre/
 
 # Don't track report as it is too big for GitHub
-*.pdf
+Report.pdf
