@@ -19,7 +19,9 @@ How to run:
                         $ cd Q1
                 2. Run the main.py file
                         $ python3 main.py
-                TODO
+                The dataset is present in Q2/data
+                The normals and offsets for part 1 are saved in Q2/lidar_normals_and_offsets.csv
+                The mappings of LIDAR points on the image for part 4 are saved in Q2/mappings
 
 Dependencies:
         * opencv-python
@@ -43,3 +45,7 @@ References:
         * https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.lstsq.html
         * https://scikit-spatial.readthedocs.io/en/stable/gallery/fitting/plot_plane.html
         * https://scikit-spatial.readthedocs.io/en/stable/objects/toc.html
+        * https://stackoverflow.com/questions/66707295/numpy-cross-product-matrix-function
+        * https://stackoverflow.com/questions/21562986/numpy-matrix-vector-multiplication
+        * https://www.geeksforgeeks.org/change-data-type-of-given-numpy-array/
+        * https://stackoverflow.com/questions/35286540/display-an-image-with-python
