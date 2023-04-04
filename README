@@ -22,6 +22,7 @@ How to run:
                 The dataset is present in Q2/data
                 The normals and offsets for part 1 are saved in Q2/lidar_normals_and_offsets.csv
                 The mappings of LIDAR points on the image for part 4 are saved in Q2/mappings
+                The plots of the normals for part 5 are saved in Q2/normal_plots
 
 Dependencies:
         * opencv-python
@@ -49,3 +50,5 @@ References:
         * https://stackoverflow.com/questions/21562986/numpy-matrix-vector-multiplication
         * https://www.geeksforgeeks.org/change-data-type-of-given-numpy-array/
         * https://stackoverflow.com/questions/35286540/display-an-image-with-python
+        * https://www.w3schools.com/python/matplotlib_histograms.asp
+        * https://en.wikipedia.org/wiki/Cosine_similarity

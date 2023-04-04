@@ -1,4 +1,5 @@
 from skspatial.objects import Plane, Points, Line
+from skspatial.plotting import plot_3d
 import numpy as np
 import open3d as o3d
 import glob
@@ -6,6 +7,7 @@ import csv
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimage
 
+# ====================================================== Part 1 =========================================================
 # Create a dictionary to store the normals and the offsets
 lidar_extrinsics = {}
 
@@ -44,6 +46,7 @@ with open('lidar_normals_and_offsets.csv', 'w', newline='') as csvfile:
         # Save the data lidar_extrinsics
         lidar_extrinsics[frame_name] = [normal, np.asarray(plane.point)]
 
+# ====================================================== Part 3 =========================================================
 # Compute the change of basis transformation from LIDAR coordinates to checkerboard coordinates
 def get_transform(camera_rotation, camera_translation, lidar_normal, lidar_offset):
     
@@ -84,8 +87,13 @@ def get_transform(camera_rotation, camera_translation, lidar_normal, lidar_offse
     # Compute the change of basis matrix C_B_L
     C_B_L =  C_B_ch * ch_B_L
 
-    return C_B_L
+    # Compute the rotation matrix
+    C_R_L = C_R_ch.dot(ch_R_L)
+    
+    return C_B_L, C_R_L
 
+# ====================================================== Part 4 =========================================================
+rotation_matrices = {}
 for fname in pcd_files:
     # Get the name of the frame
     frame_name = fname.split('.')[-2].split('/')[-1]
@@ -115,8 +123,9 @@ for fname in pcd_files:
     camera_translation = np.asarray(t).reshape(3, 1)
 
     # Get the transformation matrix
-    C_B_L = get_transform(camera_rotation, camera_translation, lidar_normal, lidar_offset)
-    
+    C_B_L, C_R_L = get_transform(camera_rotation, camera_translation, lidar_normal, lidar_offset)
+    rotation_matrices[frame_name] = C_R_L
+
     # Get the camera instrinsic matrix path
     intrinsic_path = './data/camera_parameters/camera_intrinsic.txt'
 
@@ -166,8 +175,81 @@ for fname in pcd_files:
         plt.plot(point_pixel_coords[0], point_pixel_coords[1], color='r', marker='+', markersize=5)
     
     # Save the images with LIDAR points mapped onto them
-    # plt.show()
     image_name = fname.split('/')[-1].replace('pcd', 'jpeg')
     save_path = './mappings/' + image_name
     plt.savefig(save_path)
+    plt.close()
+
+# ====================================================== Part 5 =========================================================
+with open('cos_dist.csv', 'w', newline='') as csvfile:
+    fieldnames = ["Frame", "Cosine Distance"]
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    writer.writeheader()
+
+    cosine_dist = []
+    for fname in pcd_files:
+        # Get the name of the frame
+        frame_name = fname.split('.')[-2].split('/')[-1]
+        
+        # Get the LIDAR parameters
+        lidar_normal = lidar_extrinsics[frame_name][0]
+
+        # Get the camera normal flie path
+        camera_normal_path = './data/camera_parameters/' + frame_name + '.jpeg/camera_normals.txt'
+        
+        # Read the camera normal
+        camera_normal = []
+        with open(camera_normal_path, 'r') as normalfile:
+            for line in normalfile.readlines():
+                camera_normal.append(float(line))
+        camera_normal = np.asarray(camera_normal)
+
+        # Get the rotation matrix
+        C_R_L = rotation_matrices[frame_name]
+
+        # Compute the rotated LIDAR normal
+        rotated_lidar_normal = C_R_L.dot(lidar_normal)
+        
+        # Create 3 lines, one for each normal
+        line_camera_normal = Line(point=[0, 0, 0], direction=camera_normal)
+        line_lidar_normal = Line(point=[0, 0, 0], direction=lidar_normal)
+        line_rotated_normal = Line(point=[0, 0, 0], direction=rotated_lidar_normal)
+
+        # Plot the lines
+        plt.figure()
+        plot_3d(line_camera_normal.plotter(c='r', label='Camera Normal'),
+            line_lidar_normal.plotter(c='g', label='LIDAR Normal'),
+            line_rotated_normal.plotter(c='b', label='Rotated LIDAR Normal')
+        )
+        plt.legend()
+        image_path = './normal_plots/' + frame_name + '.png' 
+        plt.savefig(image_path)
+        plt.close()
+
+        # Compute the cosine distance
+        dist = camera_normal.dot(rotated_lidar_normal) / (np.linalg.norm(rotated_lidar_normal) * np.linalg.norm(camera_normal))
+
+        # Save the distance in the CSV file
+        row = {'Frame'              : frame_name,
+               'Cosine Distance'    : dist
+              }
+        writer.writerow(row)
+
+        # Save the distance for plotting the histogram
+        cosine_dist.append(dist)
+    
+    # Compute the average and the standard deviation
+    mean = np.mean(cosine_dist)
+    std = np.std(cosine_dist)
+    print("Average error:", mean)
+    print("Standard deviation of error:", std)
+
+    # Plot the histogram of distances
+    plt.figure()
+    image_path = './dist.png'
+    plt.hist(cosine_dist)
+    plt.title('Histogram of Cosine Distances')
+    plt.xlabel('Cosine Distance')
+    plt.ylabel('Count')
+    plt.savefig(image_path)
     plt.close()
